@@ -113,12 +113,6 @@ resource "aws_eks_access_entry" "developer" {
 
  ajayp@Ajay:~/workspace/githubrepos/terraform/eks$ aws configure --profile developer
 ajayp@Ajay:~/workspace/githubrepos/terraform/eks$ aws sts get-caller-identity --profile developer
-{
-    "UserId": "AIDAQ3EGRLYBH5AB36QMJ",
-    "Account": "058264215042",
-    "Arn": "arn:aws:iam::058264215042:user/developer"
-}
-
 # connect to eks cluster
 
 ajayp@Ajay:~/workspace/githubrepos/terraform/eks$ aws eks update-kubeconfig --region us-east-2 --name staging-demo --profile developer
