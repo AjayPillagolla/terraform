@@ -110,8 +110,6 @@ resource "aws_eks_access_entry" "developer" {
 
 # Create custom profile for that user
 
-AccessKey: AKIAQ3EGRLYBHBA64TEF
-secretAccessKey: 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
 
  ajayp@Ajay:~/workspace/githubrepos/terraform/eks$ aws configure --profile developer
 AWS Access Key ID [None]: AKIAQ3EGRLYBHBA64TEF
