@@ -112,10 +112,6 @@ resource "aws_eks_access_entry" "developer" {
 
 
  ajayp@Ajay:~/workspace/githubrepos/terraform/eks$ aws configure --profile developer
-AWS Access Key ID [None]: AKIAQ3EGRLYBHBA64TEF
-AWS Secret Access Key [None]: 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
-Default region name [None]: 
-Default output format [None]: 
 ajayp@Ajay:~/workspace/githubrepos/terraform/eks$ aws sts get-caller-identity --profile developer
 {
     "UserId": "AIDAQ3EGRLYBH5AB36QMJ",
