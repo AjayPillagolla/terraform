@@ -87,6 +87,78 @@ ip-10-0-31-238.us-east-2.compute.internal   Ready    <none>   15m   v1.35.4-eks-
 ajayp@Ajay:~/workspace/githubrepos/terraform/eks$ kubectl auth can-i "*" "*"
 yes
 
+# Add IAM User and roles to EKS Cluster
+
+Different Teams need access to specific namespaces or resource quotas
+Create IAM role for the team, grant required permissions and allow team members to assume that role
+
+Create role and role-binding, Refer 1-example folder
+
+ajayp@Ajay:~/workspace/githubrepos/terraform/eks$ kubectl apply -f 1-example
+clusterrolebinding.rbac.authorization.k8s.io/my-viewer-binding unchanged
+clusterrole.rbac.authorization.k8s.io/viewer created
+
+5) Create IAM user to provide access to cluster
+
+ grant access to eks in AWS to be able to update local kubernetes config and connect to the cluster.
+ They will not be able to view workloads in EKS cluster, but just be able to connect to the cluster.
+ and we can restrict to development EKS Cluster.
+
+ # Bind developer IAM user with RBAC my-viewer group using EKS API.
+# This part is managed using Kubernetes auth config map but it is deprecated. This is the recommended option.
+resource "aws_eks_access_entry" "developer" {
+
+# Create custom profile for that user
+
+AccessKey: AKIAQ3EGRLYBHBA64TEF
+secretAccessKey: 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
+
+ ajayp@Ajay:~/workspace/githubrepos/terraform/eks$ aws configure --profile developer
+AWS Access Key ID [None]: AKIAQ3EGRLYBHBA64TEF
+AWS Secret Access Key [None]: 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
+Default region name [None]: 
+Default output format [None]: 
+ajayp@Ajay:~/workspace/githubrepos/terraform/eks$ aws sts get-caller-identity --profile developer
+{
+    "UserId": "AIDAQ3EGRLYBH5AB36QMJ",
+    "Account": "058264215042",
+    "Arn": "arn:aws:iam::058264215042:user/developer"
+}
+
+# connect to eks cluster
+
+ajayp@Ajay:~/workspace/githubrepos/terraform/eks$ aws eks update-kubeconfig --region us-east-2 --name staging-demo --profile developer
+Updated context arn:aws:eks:us-east-2:058264215042:cluster/staging-demo in /home/ajayp/.kube/config
+
+# validate if local kubernetes config uses local profile
+
+ajayp@Ajay:~/workspace/githubrepos/terraform/eks$ kubectl config view --minify
+
+# As we created a custom-cluster role and bound it with my-viewer group, so we should be able to get pods in all namespaces.
+
+ajayp@Ajay:~/workspace/githubrepos/terraform/eks$ kubectl get pods
+No resources found in default namespace.
+
+# verify access to Kubernetes Cluster
+ajayp@Ajay:~/workspace/githubrepos/terraform/eks$ kubectl auth can-i get pods
+yes
+ajayp@Ajay:~/workspace/githubrepos/terraform/eks$ kubectl auth can-i "*" "*"
+no
+ajayp@Ajay:~/workspace/githubrepos/terraform/eks$ kubectl auth can-i get  nodes
+Warning: resource 'nodes' is not namespace scoped
+
+# Admin Cluster role Binding - 2-example folder
+
+K8's ships with a default cluster admin role and group. However EKS API will not allow to use default group. We can create our own group and bind the Cluster role to it.
+
+Before we apply admin cluster role binding we need to switch to the user that has admin access(with default profile)
+
+ajayp@Ajay:~/workspace/githubrepos/terraform/eks$ aws eks update-kubeconfig --region us-east-2 --name staging-demo 
+Updated context arn:aws:eks:us-east-2:058264215042:cluster/staging-demo in /home/ajayp/.kube/config
+
+ajayp@Ajay:~/workspace/githubrepos/terraform/eks$ kubectl apply -f 2-example/
+clusterrolebinding.rbac.authorization.k8s.io/my-admin-binding created
+
 
 
 
