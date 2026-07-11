@@ -1,23 +1,28 @@
 # Create Azure Storage account
 Youtube: https://www.youtube.com/watch?v=RdqiDN4V5Cg&list=PLl4APkPHzsUUHlbhuq9V02n9AMLPySoEQ&index=4
 
-1.Create Service Principal
+# Use Service Principle for terraform to authenticate to Azure resources
+1) Create Service principle:
+ az ad sp create-for-rbac -n az-demo --role="Contributor" --scopes="/subscriptions/replace"
+2) View Service prinicipal
+az ad sp list --output table
+az ad sp list --display-name az-demo
+az ad sp list --display-name az-demo --output table
+az ad sp list --query "[].displayName" --output table
+## Output
 
-ajayp@Ajay:~/workspace/githubrepos/terraform/azure$ az ad sp create-for-rbac -n az-demo --role="Contributor" --scopes="/subscriptions/cb1acf17-97e2-4a81-8019-d927d17f646b"
-Found an existing application instance: (id) 04dec63f-21e7-4bf3-ba78-7984367f74f6. We will patch it.
-Creating 'Contributor' role assignment under scope '/subscriptions/cb1acf17-97e2-4a81-8019-d927d17f646b'
-The output includes credentials that you must protect. Be sure that you do not include these credentials in your code or check the credentials into your source control. For more information, see https://aka.ms/azadsp-cli
-{
-  "appId": "99e3e2fd-2061-493a-a8cf-71512004277e",
-  "displayName": "az-demo",
-  "password": "tHs8Q~Oxnq6D2wRi8k5W~ow4U48x5Sm0cxbfib42",
-  "tenant": "a8797389-ef48-4216-a392-06fceb38312f"
-}
+export ARM_CLIENT_ID="replace"
+export ARM_CLIENT_SECRET="replace"
+export ARM_SUBSCRIPTION_ID="replace"
+export ARM_TENANT_ID="replace"
 
-export ARM_CLIENT_ID="99e3e2fd-2061-493a-a8cf-71512004277e"
-export ARM_CLIENT_SECRET="tHs8Q~Oxnq6D2wRi8k5W~ow4U48x5Sm0cxbfib42"
-export ARM_SUBSCRIPTION_ID="cb1acf17-97e2-4a81-8019-d927d17f646b"
-export ARM_TENANT_ID="a8797389-ef48-4216-a392-06fceb38312f"
+4) login using service principal:
+az login --service-principal \
+  --username "$ARM_CLIENT_ID" \
+  --password "$ARM_CLIENT_SECRET" \
+  --tenant "$ARM_TENANT_ID"
+
+
 
 ajayp@Ajay:~/workspace/githubrepos/terraform/azure/azurestorage$ alias tf=terraform
 
