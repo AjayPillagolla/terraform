@@ -11,10 +11,10 @@ az ad sp list --display-name az-demo --output table
 az ad sp list --query "[].displayName" --output table
 ## Output
 
-export ARM_CLIENT_ID="99e3e2fd-2061-493a-a8cf-71512004277e"
-export ARM_CLIENT_SECRET="RTC8Q~pAdcexMIHiF_-BXJinwe.Om9het3MKsaZK"
-export ARM_SUBSCRIPTION_ID="dfd59b85-4966-43d0-b74f-5c5e30954da9"
-export ARM_TENANT_ID="a8797389-ef48-4216-a392-06fceb38312f"
+export ARM_CLIENT_ID="replace"
+export ARM_CLIENT_SECRET="replace"
+export ARM_SUBSCRIPTION_ID="replace"
+export ARM_TENANT_ID="replace"
 
 4) login using service principal:
 az login --service-principal \
