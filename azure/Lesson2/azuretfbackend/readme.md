@@ -3,7 +3,7 @@ Youtube: https://www.youtube.com/watch?v=RdqiDN4V5Cg&list=PLl4APkPHzsUUHlbhuq9V0
 
 # Use Service Principle for terraform to authenticate to Azure resources
 1) Create Service principle:
- az ad sp create-for-rbac -n az-demo --role="Contributor" --scopes="/subscriptions/dfd59b85-4966-43d0-b74f-5c5e30954da9"
+ az ad sp create-for-rbac -n az-demo --role="Contributor" --scopes="/subscriptions/replace"
 2) View Service prinicipal
 az ad sp list --output table
 az ad sp list --display-name az-demo
