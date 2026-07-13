@@ -3,3 +3,4 @@ Youtube:Youtube: https://www.youtube.com/watch?v=RdqiDN4V5Cg&list=PLl4APkPHzsUUH
 ## Lessons
 
 1. Lesson1 : Azure Storage with terraform
+2. Lesson2: Create Azure tfbackend statefile
